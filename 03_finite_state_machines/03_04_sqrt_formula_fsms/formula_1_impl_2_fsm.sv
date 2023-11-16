@@ -54,8 +54,8 @@ module formula_1_impl_2_fsm
 
         isqrt_1_x_vld = '0;
         isqrt_2_x_vld = '0;
-        isqrt_1_x     = 'x;
-        isqrt_2_x     = 'x;
+        isqrt_1_x     = 'x;  //?
+        isqrt_2_x     = 'x;  //?
 
         case (state)
         IDLE:
@@ -79,7 +79,7 @@ module formula_1_impl_2_fsm
             if (isqrt_1_y_vld & isqrt_2_y_vld) //if got results from sqrt(a) and sqrt(b)
             begin
                 isqrt_1_x_vld = '1;
-                local_res = isqrt_1_y + isqrt_2_y;
+                local_res  = isqrt_1_y + isqrt_2_y;
                 next_state = WAIT_C;
             end
         end
@@ -88,7 +88,7 @@ module formula_1_impl_2_fsm
         begin
             if (isqrt_1_y_vld) //if got result from sqrt(c)
             begin
-                local_res = isqrt_1_y;
+                local_res  = isqrt_1_y;
                 next_state = IDLE;
             end
         end
@@ -100,7 +100,7 @@ module formula_1_impl_2_fsm
         if (rst)
             state <=IDLE;
         else 
-            next_state <= state;
+            state <= next_state;
     
     //Accumulating the result
     always_ff @ (posedge clk)
