@@ -36,7 +36,7 @@ module formula_1_impl_2_fsm
     //
     // Design the FSM to calculate an answer and provide the correct `res` value
 
-    logic [15:0] local_res;
+    logic [31:0] local_res;
     logic local_res_vld = '0;
 
     //States
@@ -90,9 +90,9 @@ module formula_1_impl_2_fsm
         begin
             if (isqrt_1_y_vld) //if got result from sqrt(c)
             begin
+                next_state = IDLE;
                 local_res  = isqrt_1_y;
                 local_res_vld = '1;
-                next_state = IDLE;
             end
         end
         endcase
@@ -115,7 +115,7 @@ module formula_1_impl_2_fsm
     always_ff @ (posedge clk)
         if (state == IDLE)
             res <= '0;
-        else if (local_res_vld) 
+        else if (isqrt_1_y_vld | isqrt_2_y_vld) 
             begin
             res <= res + local_res;
             local_res_vld <= '0;
