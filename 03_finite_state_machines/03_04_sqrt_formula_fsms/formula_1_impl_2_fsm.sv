@@ -39,6 +39,9 @@ module formula_1_impl_2_fsm
     logic [31:0] local_res;
     logic local_res_vld = '0;
 
+    //logic [31:0] tmp_local_res;
+    //logic tmp_local_res_vld = '0;
+
     //States
     enum logic[1:0]
     {
@@ -115,11 +118,10 @@ module formula_1_impl_2_fsm
     always_ff @ (posedge clk)
         if (state == IDLE)
             res <= '0;
-        else if (isqrt_1_y_vld | isqrt_2_y_vld) 
+        else if (state == WAIT_A_B & isqrt_1_y_vld & isqrt_2_y_vld |
+                 state == WAIT_C   & isqrt_1_y_vld) 
             begin
             res <= res + local_res;
-            local_res_vld <= '0;
-            local_res <= 16'b0;
             end
 
 
