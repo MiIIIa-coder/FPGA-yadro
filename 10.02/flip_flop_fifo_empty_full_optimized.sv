@@ -14,7 +14,9 @@ module flip_flop_fifo_empty_full_optimized
     input  [width - 1:0] write_data,
     output [width - 1:0] read_data,
     output               empty,
-    output               full
+    output               full,
+
+    input                PENABLE
 );
 
     //------------------------------------------------------------------------
@@ -39,7 +41,7 @@ module flip_flop_fifo_empty_full_optimized
             wr_ptr <= '0;
             wr_ptr_odd_circle <= 1'b0;
         end
-        else if (push)
+        else if (push & PENABLE)
         begin
             if (wr_ptr == max_ptr)
             begin
