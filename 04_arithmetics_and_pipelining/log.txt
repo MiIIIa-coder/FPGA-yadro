@@ -1,0 +1,28 @@
+04_01_signed_add_with_overflow.sv:63: error: overflow is not a valid l-value in testbench.inst.
+04_01_signed_add_with_overflow.sv:23:      : overflow is declared here as wire.
+04_01_signed_add_with_overflow.sv:65: error: overflow is not a valid l-value in testbench.inst.
+04_01_signed_add_with_overflow.sv:23:      : overflow is declared here as wire.
+04_01_signed_add_with_overflow.sv:68: error: overflow is not a valid l-value in testbench.inst.
+04_01_signed_add_with_overflow.sv:23:      : overflow is declared here as wire.
+3 error(s) during elaboration.
+04_02_signed_add_with_saturation.sv:46: error: sum is not a valid l-value in testbench.inst.
+04_02_signed_add_with_saturation.sv:22:      : sum is declared here as wire.
+04_02_signed_add_with_saturation.sv:50: error: sum is not a valid l-value in testbench.inst.
+04_02_signed_add_with_saturation.sv:22:      : sum is declared here as wire.
+04_02_signed_add_with_saturation.sv:52: error: sum is not a valid l-value in testbench.inst.
+04_02_signed_add_with_saturation.sv:22:      : sum is declared here as wire.
+04_02_signed_add_with_saturation.sv:56: error: sum is not a valid l-value in testbench.inst.
+04_02_signed_add_with_saturation.sv:22:      : sum is declared here as wire.
+4 error(s) during elaboration.
+TEST unsigned  0 *  0 =   z
+04_03_signed_or_unsigned_mul.sv FAIL:   0 EXPECTED
+04_03_signed_or_unsigned_mul.sv:114: $finish called at 1 (1s)
+TEST 00100100 00100000 00100000 00100000 00100000 zzzzzzzz zzzzzzzz xxxxxxxx zzzzzzzz
+04_04_four_ways_of_doing_shift.sv FAIL - see above
+04_04_four_ways_of_doing_shift.sv:140: $finish called at 1 (1s)
+TEST 00000000 << 00000000 00000000 (EXP 00000000) >> zzzzzzzz zzzzzzzz (EXP 00000000)
+04_05_circular_shifts.sv FAIL - see above
+04_05_circular_shifts.sv:88: $finish called at 1 (1s)
+TEST   36 00100100   4 00000100   z zzzzzzzz   x xxxxxxxx   z zzzzzzzz
+04_06_arithmetic_shift_or_signed_divide_by_power_of_2.sv FAIL. EXPECTED    4 00000100
+04_06_arithmetic_shift_or_signed_divide_by_power_of_2.sv:99: $finish called at 1 (1s)
