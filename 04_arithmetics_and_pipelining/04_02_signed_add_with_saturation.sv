@@ -19,7 +19,7 @@ endmodule
 module signed_add_with_saturation
 (
   input  [3:0] a, b,
-  output [3:0] sum
+  output logic [3:0] sum
 );
   // Task:
   //
