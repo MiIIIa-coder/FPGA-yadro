@@ -43,16 +43,15 @@ module formula_1_pipe
 
     //'include "isqrt.sv";
 
-    logic [31:0] sqrt_a;
-    logic [31:0] sqrt_b;
-    logic [31:0] sqrt_c;
+    logic [15:0] sqrt_a;
+    logic [15:0] sqrt_b;
+    logic [15:0] sqrt_c;
     logic [31:0] sum;
 
     logic vld_a;
     logic vld_b;
     logic vld_c;
 
-    logic isqrt_vld;
     logic sum_vld;
 
     isqrt   isqrt1
@@ -93,23 +92,18 @@ module formula_1_pipe
             res_vld <= '0;
         else
             res_vld <= sum_vld; //valid from adder
-
-    always_ff @ (posedge clk or posedge rst) //??? нужен ли?
-        if (rst)
-            sum_vld <= '0;
-        else
-            sum_vld <= isqrt_vld;
         
     always_ff @ (posedge clk or posedge rst)
         if (rst)
-            isqrt_vld <= '0;
+            sum_vld <= '0;
         else
-            isqrt_vld <= (vld_a & vld_b & vld_c);
+            sum_vld <= (vld_a & vld_b & vld_c);
     
-    assign sum = sqrt_a + sqrt_b + sqrt_c;
+    always_ff @ (posedge clk)
+        sum <= (sqrt_a + sqrt_b + sqrt_c);
 
     always_ff @ (posedge clk)
-        if (isqrt_vld)
+        if (sum_vld)
             res <= sum;
 
 endmodule
