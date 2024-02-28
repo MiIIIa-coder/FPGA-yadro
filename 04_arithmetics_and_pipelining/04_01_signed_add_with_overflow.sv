@@ -18,9 +18,9 @@ endmodule
 
 module signed_add_with_overflow
 (
-  input  [3:0] a, b,
-  output [3:0] sum,
-  output  logic     overflow
+  input  logic [3:0] a, b,
+  output logic [3:0] sum,
+  output logic       overflow
 );
   // Task:
   //
@@ -34,25 +34,6 @@ module signed_add_with_overflow
   // when the sum (either positive or negative)
   // of two input arguments does not fit into 4 bits.
   // Otherwise the 'overflow' should be set to 0.
-
-  // if (a[3] == 0 && b[3] == 0)
-  //   begin
-  //     if (a + b > 4'b0111)
-  //       assign overflow = 1;
-  //     else  
-  //       assign overflow = 0;
-  //   end
-  // else if (a[3] == 1 && b[3] == 1)
-  //   begin
-  //     if (a + b < 4'b0111)
-  //       assign overflow = 1;
-  //     else
-  //       assign overflow = 0;
-  //   end
-  // else
-  //   assign overflow = 0;
-
-  // assign sum = a + b;
 
   assign sum = a + b;
 
