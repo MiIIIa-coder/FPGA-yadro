@@ -65,8 +65,7 @@ module right_shift_of_N_by_S_using_concatenation
   // that shifts the unsigned input by S bits to the right
   // using concatenation operation
 
-  assign res = {S'b0, a [N - 1 : N - 1 - S - 1]};  //SYNTAX ERROR
-  //assign res = {3'b0, a [N - 1 : N - 1 - S - 1]}; //OK
+  assign res = {{S{1'b0}}, {a [N - 1 : N - 1 - S - 1]}};
 
 endmodule
 
