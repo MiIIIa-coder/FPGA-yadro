@@ -61,11 +61,11 @@ module shift_register_with_valid
     input                clk,
     input                rst,
 
-    input                in_vld,
-    input  [width - 1:0] in_data,
+    input  logic               in_vld,
+    input  logic [width - 1:0] in_data,
 
-    output               out_vld,
-    output [width - 1:0] out_data
+    output logic               out_vld,
+    output logic [width - 1:0] out_data
 );
     // Task:
     //
@@ -76,6 +76,45 @@ module shift_register_with_valid
     // see the article by Yuri Panchul published in
     // FPGA-Systems Magazine :: FSM :: Issue ALFA (state_0)
     // You can download this issue from https://fpga-systems.ru/fsm
+
+    logic [width - 1:0] data [depth - 1:0];
+    logic [depth - 1:0] vld_data;
+
+    always_ff @ (posedge clk)
+    begin
+        if (rst)
+            for (int i = 0; i < width; i++)
+            begin
+                data[i]     <= 'b0;
+                vld_data[i] <= 'b0;
+            end
+        else
+        begin
+            if (in_vld)
+            begin
+                data[0]     <= in_data;
+                vld_data[0] <= 'b1;
+            end
+            else
+            begin
+                data[0]     <= 'x;
+                vld_data[0] <= 'b0;
+            end
+
+            //-------------------------------------------------------
+            // register step
+
+            for (int i = 1; i < depth; i++)
+            begin
+                data[i]     <= data[i-1];
+                vld_data[i] <= vld_data[i-1];
+            end
+
+        end
+    end
+
+    assign out_data = data[depth - 1];
+    assign out_vld  = vld_data[depth - 1];
 
 
 endmodule
