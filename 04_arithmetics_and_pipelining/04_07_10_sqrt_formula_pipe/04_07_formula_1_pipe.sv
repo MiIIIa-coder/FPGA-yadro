@@ -87,23 +87,15 @@ module formula_1_pipe
         .y(sqrt_c)
     );
 
+
+
     always_ff @ (posedge clk or posedge rst)
         if (rst)
             res_vld <= '0;
         else
-            res_vld <= sum_vld; //valid from adder
-        
-    always_ff @ (posedge clk or posedge rst)
-        if (rst)
-            sum_vld <= '0;
-        else
-            sum_vld <= (vld_a & vld_b & vld_c);
+            res_vld <= vld_a & vld_b & vld_c; //valid from adder
     
     always_ff @ (posedge clk)
-        sum <= (sqrt_a + sqrt_b + sqrt_c);
-
-    always_ff @ (posedge clk)
-        if (sum_vld)
-            res <= sum;
+        res <= sqrt_a + sqrt_b + sqrt_c;
 
 endmodule
