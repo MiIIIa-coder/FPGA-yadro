@@ -3,6 +3,9 @@
 //----------------------------------------------------------------------------
 
 module formula_1_pipe_aware_fsm
+# (
+    parameter count_args = 3
+)
 (
     input               clk,
     input               rst,
@@ -107,7 +110,7 @@ module formula_1_pipe_aware_fsm
         begin
             isqrt_x = 'x;
 
-            if (counter == 3)
+            if (counter == count_args)
             begin
                 next_state   = st_put_a;
                 flag_res_vld = 'b0;
@@ -137,7 +140,7 @@ module formula_1_pipe_aware_fsm
         if (rst)
             res_vld <= '0;
         else
-            res_vld <= (counter == 3 & state == st_wait_res & !flag_res_vld); //(state == st_wait_c_res & isqrt_y_vld);
+            res_vld <= (counter == count_args & state == st_wait_res & !flag_res_vld); 
 
     always_ff @ (posedge clk)
     begin
