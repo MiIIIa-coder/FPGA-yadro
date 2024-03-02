@@ -41,14 +41,14 @@ module formula_2_pipe
     // FPGA-Systems Magazine :: FSM :: Issue ALFA (state_0)
     // You can download this issue from https://fpga-systems.ru/fsm
 
-    logic [15:0] sqrt_a;  //sqrt(a)
-    logic [15:0] sqrt_b;  //sqrt(b + sqrt(a))
-    logic [15:0] sqrt_c;  //sqrt(c + sqrt(b + sqrt(a)))
-    logic [31:0] sum1;    //b + sqrt(a)
-    logic [31:0] sum2;    //c + sqrt(b + sqrt(a))
+    logic [15:0] sqrt_a;  //sqrt(a + sqrt(b + sqrt(c)))
+    logic [15:0] sqrt_b;  //sqrt(b + sqrt(c))
+    logic [15:0] sqrt_c;  //sqrt(c)
+    logic [31:0] sum1;    //b + sqrt(c)
+    logic [31:0] sum2;    //a + sqrt(b + sqrt(c))
 
     logic [31:0] out_reg_s1;  //out of shift register 1
-    logic [31:0] out_reg_s2;  //out of shift register 1
+    logic [31:0] out_reg_s2;  //out of shift register 2
 
     logic vld_sqrt_a;
     logic vld_sqrt_b;
@@ -61,8 +61,6 @@ module formula_2_pipe
     logic vld_reg_s1;     //valid out_data of shift register1
     logic vld_reg_s2;     //valid out_data of shift register2
 
-    //logic res_reg;  //register for res
-
     //-----------------------------------------------
     // ISQRT instances
 
@@ -71,10 +69,10 @@ module formula_2_pipe
         .clk(clk),
         .rst(rst), 
         .x_vld(arg_vld), 
-        .x(a),
+        .x(c),
 
-        .y_vld(vld_sqrt_a), 
-        .y(sqrt_a)
+        .y_vld(vld_sqrt_c), 
+        .y(sqrt_c)
     );
     
     isqrt   isqrt2
@@ -95,8 +93,8 @@ module formula_2_pipe
         .x_vld(vld_sqrt_reg2 & vld_sh_r_reg2), 
         .x(sum2),
 
-        .y_vld(vld_sqrt_c), 
-        .y(sqrt_c)
+        .y_vld(vld_sqrt_a), 
+        .y(sqrt_a)
     );
 
     //-----------------------------------------------
@@ -118,7 +116,7 @@ module formula_2_pipe
         .clk(clk),
         .rst(rst),
         .in_vld(arg_vld),
-        .in_data(c),
+        .in_data(a),
 
         .out_vld(vld_reg_s2),
         .out_data(out_reg_s2)
@@ -131,21 +129,21 @@ module formula_2_pipe
         if (rst)
             res_vld <= 'b0;
         else
-            res_vld <= vld_sqrt_c;
+            res_vld <= vld_sqrt_a;
 
     always_ff @ (posedge clk)
     begin
-        //SUM1: b + sqrt(a)
-        if (vld_sqrt_a & vld_reg_s1)
-            sum1 <= sqrt_a + out_reg_s1;
+        //SUM1: b + sqrt(c)
+        if (vld_sqrt_c & vld_reg_s1)
+            sum1 <= sqrt_c + out_reg_s1;
         
-        //SUM2: c + sqrt(b + sqrt(a))
+        //SUM2: c + sqrt(b + sqrt(c))
         if (vld_sqrt_b & vld_reg_s2)
             sum2 <= sqrt_b + out_reg_s2;
 
-        //RES: sqrt(c + sqrt(b + sqrt(a)))
-        if (vld_sqrt_c)
-            res <= sqrt_c;
+        //RES: sqrt(a + sqrt(b + sqrt(c)))
+        if (vld_sqrt_a)
+            res <= sqrt_a;
     end
 
     //-----------------------------------------------
@@ -153,7 +151,7 @@ module formula_2_pipe
     
     always_ff @ (posedge clk)
     begin
-        vld_sqrt_reg1 <= vld_sqrt_a;
+        vld_sqrt_reg1 <= vld_sqrt_c;
         vld_sqrt_reg2 <= vld_sqrt_b;
 
         vld_sh_r_reg1 <= vld_reg_s1;
