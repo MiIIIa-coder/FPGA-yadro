@@ -85,6 +85,7 @@ module ff_fifo_with_reg_empty_full
             empty    <= empty_d;
             full     <= full_d;
         end
+        
 
     //------------------------------------------------------------------------
 
