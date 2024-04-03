@@ -9,8 +9,9 @@ module tb_
 logic clk;
 
 logic up_data1, up_data2;
-logic [N - 1:0] data1, data2;
-logic [N:0] RX_data1, RX_data2;
+logic [width - 1:0] data1;
+logic [width - 1:0] data2;
+logic [width:0] RX_data1, RX_data2;
 
 localparam CLK_PERIOD = 10;
 
@@ -54,6 +55,14 @@ initial
 // check
 initial
 begin
+    $display("HERE \n");
+    `ifdef __ICARUS__
+        // Uncomment the following `define
+        // to generate a VCD file and analyze it using GTKwave
+
+        $dumpvars;
+    `endif
+
     @(posedge clk);
     up_data1 <= 'b1;
     data1 <= 'b10100101;

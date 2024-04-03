@@ -29,11 +29,11 @@ module UART
             // q[N+2] <= 'b0; //start_bit
             // q[N+1:2] <= data;
             // q[1:0] <= {'b0, 'b1};
-            q <= {'b0, data, 'b0, 'b1};
+            q <= {1'b0, data, 1'b0, 1'b1};
         end
         else 
         begin
-            q <= {{q [N+1:0]}, {'b1}};
+            q <= {{q [N+1:0]}, {1'b1}};
             if (q[N+2] == 'b1 & counter <= N & counter > 0)
                 q[1 + counter] <= ~ q[1 + counter];
         end
@@ -76,9 +76,11 @@ module UART
                 end
             
             rec_st:
+            begin
                 cnt_RX = cnt_RX + 'b1;
                 if (cnt_RX == N)
                     next_state = sp_st;
+            end
             
             sp_st:
                 if (RX == 'b1)
@@ -87,7 +89,7 @@ module UART
                 begin
                     next_state = rec_st;   //continue get data
                     cnt_RX = 0;
-                end;
+                end
 
         endcase
     end

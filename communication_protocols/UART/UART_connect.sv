@@ -18,7 +18,7 @@ module UART_connect
 wire RX1, TX1;
 wire RX2, TX2;
 
-UART_module UART_1
+UART UART_1
 (
     .clk(clk),
     .data(data1),
@@ -28,7 +28,7 @@ UART_module UART_1
     .RX_data(RX_data1)
 );
 
-UART_module UART_2
+UART UART_2
 (
     .clk(clk),
     .data(data2),
