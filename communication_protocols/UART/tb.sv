@@ -1,4 +1,4 @@
-`timescale 1ns/1ps;
+//`timescale 1ns/1ps;
 `include "UART_connect.sv"
 
 module tb_
@@ -7,16 +7,18 @@ module tb_
 );
 
 logic clk;
+logic rst;
 
 logic up_data1, up_data2;
 logic [width - 1:0] data1;
 logic [width - 1:0] data2;
-logic [width:0] RX_data1, RX_data2;
+logic [width - 1:0] RX_data1, RX_data2;
 
 localparam CLK_PERIOD = 10;
 
 UART_connect #(.N(width)) DUT(
     .clk(clk),
+    .rst(rst),
 
     .data1(data1),
     .up_data1(up_data1),
@@ -55,22 +57,70 @@ initial
 // check
 initial
 begin
-    $display("HERE \n");
-    `ifdef __ICARUS__
-        // Uncomment the following `define
-        // to generate a VCD file and analyze it using GTKwave
-
-        $dumpvars;
-    `endif
+    repeat (2) @ (posedge clk);
+    rst <= 'b0;
+    repeat (2) @ (posedge clk);
+    rst <= 'b1;
+    repeat (2) @ (posedge clk);
+    rst <= 'b0;
 
     @(posedge clk);
     up_data1 <= 'b1;
     data1 <= 'b10100101;
 
-    repeat (40) @ (posedge clk);
+    up_data2 <= 'b1;
+    data2 <= 'b00101011;
 
-    $write("HERE \n");
-    $write(" %b", RX_data2); 
+    @(posedge clk);
+    up_data1 <= 'b0;
+    up_data2 <= 'b0;
+
+    repeat (12) @ (posedge clk);
+
+    if (RX_data2 !== data1)
+    begin
+        $write("ERROR: UART2 got: %b, but expected: %b \n", RX_data2, data1);
+        $error;
+    end
+
+    if (RX_data1 !== data2)
+    begin
+        $write("ERROR: UART1 got: %b, but expected: %b \n", RX_data1, data2);
+        $error;
+    end
+
+    // $write("data1: %b \n", data1); 
+
+    @(posedge clk);
+    rst <= 'b1;
+    @(posedge clk);
+    rst <= 'b0;
+
+    @(posedge clk);
+    up_data1 <= 'b1;
+    data1 <= 'b10110101;
+
+    up_data2 <= 'b1;
+    data2 <= 'b11000101;
+
+    @(posedge clk);
+    up_data1 <= 'b0;
+    up_data2 <= 'b0;
+
+    repeat (12) @ (posedge clk);
+
+    if (RX_data2 !== data1)
+    begin
+        $write("ERROR: UART2 got: %b, but expected: %b \n", RX_data2, data1);
+        $error;
+    end
+
+    //$write("RX_data1: %b \n", RX_data1); 
+    if (RX_data1 !== data2)
+    begin
+        $write("ERROR: UART1 got: %b, but expected: %b \n", RX_data1, data2);
+        $error;
+    end
 
 end
 
