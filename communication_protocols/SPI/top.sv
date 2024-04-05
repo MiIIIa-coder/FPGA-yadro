@@ -1,3 +1,6 @@
+`include "master_SPI.sv"
+`include "slave_SPI.sv"
+
 module top
 #(parameter width = 8)
 (
@@ -19,7 +22,7 @@ module top
     // input up_data3,
     // input [width - 1:0] data3,
 
-    output logic [width - 1:0] s_data1,
+    output logic [width - 1:0] s_data1
     // output logic [width - 1:0] s_data2,
     // output logic [width - 1:0] s_data3
 );

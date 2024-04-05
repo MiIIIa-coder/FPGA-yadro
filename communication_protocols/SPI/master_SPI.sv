@@ -1,6 +1,6 @@
 module MASTER_SPI
 #(parameter width = 8)
-{
+(
     input clk,
     input rst,
     
@@ -15,7 +15,7 @@ module MASTER_SPI
     output logic MOSI,
     output logic SCLK,
     output logic SS
-};
+);
 
 localparam cnt_width = $clog2(width);
 
@@ -32,7 +32,7 @@ state, next_state;
 
 always_comb
 begin
-    state = next_state;
+    next_state = state;
 
     case(state)
 
@@ -42,7 +42,7 @@ begin
             else 
                 next_state = tranc_rec_st;
         
-        up_data:
+        up_data_st:
             next_state = tranc_rec_st;  //возможно нужно будет ждать SS
         
         tranc_rec_st:
@@ -71,7 +71,7 @@ begin
         SCLK <= 'x;
     end
 
-    if (state == up_data)
+    if (state == up_data_st)
     begin
         master_data <= data;
         //counter <= '0;

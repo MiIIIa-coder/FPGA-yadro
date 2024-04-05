@@ -1,3 +1,5 @@
+`include "top.sv"
+
 module tb
 #(parameter width = 8);
 
@@ -25,7 +27,7 @@ top #(.width(width)) DUT
 
     .up_data (up_data),
     .data    (data   ),
-    .top_s   (top_s  ),
+    .top_ss  (top_ss ),
     .m_data  (m_data ),
 
     .up_data1(up_data1),
@@ -36,7 +38,7 @@ top #(.width(width)) DUT
 
 initial
 begin
-    $dumpfile(tv.vcd);
+    $dumpfile("tb.vcd");
     $dumpvars(0, tb);
 end
 
@@ -70,7 +72,25 @@ endtask
 // test DUT
 initial
 begin
-    
+    @(posedge clk);
+
+    reset();
+    @(posedge clk);
+
+    up_data <= 'b1;
+    data <= 'b10100101;
+    top_ss <= 'b00;
+
+    up_data1 <= 'b1;
+    data1 <= 'b11001101;
+
+    @(posedge clk);
+    up_data  <= 'b0;
+    up_data1 <= 'b0;
+
+    repeat (12) @(posedge clk);
+    $display("HERE!!\n");
+
 end
 
 

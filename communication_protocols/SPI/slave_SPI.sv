@@ -6,7 +6,7 @@ module SLAVE_SPI
     input  up_data,
     input  [width - 1:0] data,
 
-    output [width - 1:0] s_data,
+    output logic [width - 1:0] s_data,
 
     output logic MISO,
     input        MOSI,
@@ -29,7 +29,7 @@ state, next_state;
 
 always_comb
 begin
-    state = next_state;
+    next_state = state;
 
     case(state)
 
